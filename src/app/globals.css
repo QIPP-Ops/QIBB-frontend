@@ -1,26 +1,137 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  
+  /* ACWA Brand Colors */
+  --color-brand-lilac: #9273DA;
+  --color-brand-purple: #2E2044;
+  --color-brand-lime: #D2F050;
+  --color-brand-dark: #1A1227;
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --background: oklch(0.98 0 0);
+  --foreground: #2E2044;
+  --card: oklch(1 0 0);
+  --card-foreground: #2E2044;
+  --popover: oklch(1 0 0);
+  --popover-foreground: #2E2044;
+  --primary: #9273DA;
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: #D2F050;
+  --secondary-foreground: #2E2044;
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: #D2F050;
+  --accent-foreground: #2E2044;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: #9273DA;
+  --chart-1: #9273DA;
+  --chart-2: #D2F050;
+  --chart-3: #2E2044;
+  --chart-4: #B19CD9;
+  --chart-5: #E2F590;
+  --radius: 0.75rem;
+  --sidebar: #f8fafc;
+  --sidebar-foreground: #2E2044;
+  --sidebar-primary: #9273DA;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f1f5f9;
+  --sidebar-accent-foreground: #2E2044;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #9273DA;
+}
+
+.dark {
+  --background: #1A1227;
+  --foreground: #F8FAFC;
+  --card: #2E2044;
+  --card-foreground: #F8FAFC;
+  --popover: #2E2044;
+  --popover-foreground: #F8FAFC;
+  --primary: #9273DA;
+  --primary-foreground: #F8FAFC;
+  --secondary: #D2F050;
+  --secondary-foreground: #1A1227;
+  --muted: #3D2D5A;
+  --muted-foreground: #A19BAD;
+  --accent: #D2F050;
+  --accent-foreground: #1A1227;
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: #3D2D5A;
+  --input: #3D2D5A;
+  --ring: #9273DA;
+  --chart-1: #9273DA;
+  --chart-2: #D2F050;
+  --chart-3: #ffffff;
+  --chart-4: #B19CD9;
+  --chart-5: #E2F590;
+  --sidebar: #1A1227;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: #9273DA;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #2E2044;
+  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-border: #3D2D5A;
+  --sidebar-ring: #9273DA;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
 }
