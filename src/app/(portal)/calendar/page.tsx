@@ -37,8 +37,10 @@ export default function CalendarPage() {
   const roles = Array.from(new Set(employees.map(e => e.role)));
 
   const filteredEmployees = employees.filter(emp => {
-    const matchesSearch = emp.name.toLowerCase().includes(search.toLowerCase()) ||
-      emp.empId.toLowerCase().includes(search.toLowerCase());
+    const name = emp.name || "";
+    const empId = emp.empId || "";
+    const matchesSearch = name.toLowerCase().includes(search.toLowerCase()) ||
+      empId.toLowerCase().includes(search.toLowerCase());
     const matchesCrew = crewFilter === "all" || emp.crew === crewFilter;
     const matchesRole = roleFilter === "all" || emp.role === roleFilter;
     return matchesSearch && matchesCrew && matchesRole;

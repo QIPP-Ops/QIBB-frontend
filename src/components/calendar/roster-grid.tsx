@@ -58,6 +58,7 @@ interface Leave {
 }
 
 interface Employee {
+  _id?: string;
   empId: string;
   name: string;
   crew: string;
@@ -89,13 +90,15 @@ export default function RosterCalendar({ employees, onUpdate }: RosterGridProps)
     if (!user) return false;
     if (user.role === 'admin') return true;
     
-    // User can only edit their own row
-    // We compare user email prefix with empId (as a fallback or standard) 
-    // OR we match by name if empId is not user-linked yet.
-    // Based on industry standards, we'll try to match by a normalized name/prefix.
-    const userPrefix = user.email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
-    const empNameNormalized = emp.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    // Direct match by Employee ID is the most reliable (Unified Model)
+    if (user.empId && emp.empId && user.empId === emp.empId) return true;
+
+    // Fallback name matching with safety checks
+    const userPrefix = user.email?.split('@')[0]?.toLowerCase()?.replace(/[^a-z0-9]/g, '') || "";
+    const empNameNormalized = emp.name?.toLowerCase()?.replace(/[^a-z0-9]/g, '') || "";
     
+    if (!empNameNormalized || !userPrefix) return false;
+
     return empNameNormalized.includes(userPrefix) || userPrefix.includes(empNameNormalized);
   };
 
@@ -398,7 +401,7 @@ export default function RosterCalendar({ employees, onUpdate }: RosterGridProps)
           {/* Rows */}
           <div className="max-h-[600px] overflow-y-auto overflow-x-hidden">
             {employees.map((emp, i) => (
-              <div key={emp.empId} className="flex border-b group animate-in fade-in slide-in-from-left-4" style={{ animationDelay: `${i * 20}ms` }}>
+              <div key={emp._id || emp.empId || i} className="flex border-b group animate-in fade-in slide-in-from-left-4" style={{ animationDelay: `${i * 20}ms` }}>
                 <div 
                   className={cn(
                     "w-[200px] p-3 border-r bg-muted/5 flex flex-col justify-center min-h-[64px] transition-colors shrink-0 sticky left-0 z-20",

@@ -47,10 +47,17 @@ export default function DashboardPage() {
     setIsMounted(true);
     const fetchData = async () => {
       try {
-        const response = await kpiApi.getLatest({
-          ...(startDate && { startDate }),
-          ...(endDate && { endDate }),
-        });
+        // If no dates selected, default to last 30 days
+        let params: any = {};
+        if (startDate && endDate) {
+          params = { startDate, endDate };
+        } else if (!startDate && !endDate) {
+          const thirtyDaysAgo = new Date();
+          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+          params = { startDate: format(thirtyDaysAgo, "yyyy-MM-dd") };
+        }
+
+        const response = await kpiApi.getLatest(params);
         setData(response.data);
       } catch (error) {
         console.error("Failed to fetch KPIs:", error);
@@ -226,11 +233,16 @@ export default function DashboardPage() {
                           dataKey="date" 
                           tickFormatter={(str) => {
                             const d = new Date(str);
-                            return `${d.getDate()}/${d.getMonth() + 1}`;
+                            // If showing a small range, show day/month. If large, show month/year
+                            if (data.length > 365) {
+                                return format(d, "MMM yy");
+                            }
+                            return format(d, "dd/MM");
                           }}
                           axisLine={false}
                           tickLine={false}
-                          tick={{ fontSize: 12, fill: '#64748b' }}
+                          tick={{ fontSize: 10, fill: '#64748b' }}
+                          minTickGap={30}
                         />
                         <YAxis 
                            axisLine={false}

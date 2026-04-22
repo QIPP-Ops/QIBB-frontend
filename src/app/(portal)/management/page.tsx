@@ -13,6 +13,7 @@ import {
 import { 
   Dialog, 
   DialogContent, 
+  DialogDescription,
   DialogHeader, 
   DialogTitle, 
   DialogTrigger,
@@ -135,8 +136,10 @@ export default function ManagementPage() {
   };
 
   const filteredEmployees = employees.filter(emp => {
-    const matchesSearch = emp.name.toLowerCase().includes(search.toLowerCase()) ||
-      emp.empId.toLowerCase().includes(search.toLowerCase());
+    const name = emp.name || "";
+    const empId = emp.empId || "";
+    const matchesSearch = name.toLowerCase().includes(search.toLowerCase()) ||
+      empId.toLowerCase().includes(search.toLowerCase());
     const matchesCrew = crewFilter === "all" || emp.crew === crewFilter;
     const matchesRole = roleFilter === "all" || emp.role === roleFilter;
     return matchesSearch && matchesCrew && matchesRole;
