@@ -85,9 +85,28 @@ export default function RosterCalendar({ employees, onUpdate }: RosterGridProps)
   const { user } = useAuth();
   const router = useRouter();
 
+  const canEdit = (emp: Employee) => {
+    if (!user) return false;
+    if (user.role === 'admin') return true;
+    
+    // User can only edit their own row
+    // We compare user email prefix with empId (as a fallback or standard) 
+    // OR we match by name if empId is not user-linked yet.
+    // Based on industry standards, we'll try to match by a normalized name/prefix.
+    const userPrefix = user.email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+    const empNameNormalized = emp.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    
+    return empNameNormalized.includes(userPrefix) || userPrefix.includes(empNameNormalized);
+  };
+
   const handleCellClick = (day: Date, emp: Employee, event: React.MouseEvent) => {
     if (!user) {
       toast.info("Read-only access: Sign in as Personnel to manage roster records.");
+      return;
+    }
+
+    if (!canEdit(emp)) {
+      toast.error("Permission Denied: You can only manage your own roster entries.");
       return;
     }
 
@@ -178,6 +197,7 @@ export default function RosterCalendar({ employees, onUpdate }: RosterGridProps)
   };
 
   const handleSingleClickManage = (day: Date, emp: Employee) => {
+    if (!canEdit(emp)) return;
     setSelectedDates([day]);
     setSelectedEmp(emp);
     setIsDialogOpen(true);
@@ -355,16 +375,16 @@ export default function RosterCalendar({ employees, onUpdate }: RosterGridProps)
       </div>
 
       <div className="overflow-x-auto border-x border-b rounded-b-2xl bg-card">
-        <div className="min-w-[1200px]">
+        <div style={{ width: `${200 + (daysInMonth.length * 48)}px` }}>
           {/* Header */}
-          <div className="grid grid-cols-[200px_1fr] border-b">
-            <div className="p-4 font-bold border-r bg-muted/30">Personnel</div>
-            <div className="grid" style={{ gridTemplateColumns: `repeat(${daysInMonth.length}, 1fr)` }}>
+          <div className="flex border-b bg-muted/30 sticky top-0 z-30">
+            <div className="w-[200px] p-4 font-bold border-r bg-muted/30 shrink-0 sticky left-0 z-40">Personnel</div>
+            <div className="flex flex-1">
               {daysInMonth.map(day => (
                 <div 
                   key={day.toISOString()} 
                   className={cn(
-                    "p-2 text-center border-r last:border-r-0 flex flex-col items-center justify-center min-w-[40px]",
+                    "w-[48px] p-2 text-center border-r last:border-r-0 flex flex-col items-center justify-center shrink-0",
                     (day.getDay() === 5 || day.getDay() === 6) && "bg-muted/50"
                   )}
                 >
@@ -376,13 +396,13 @@ export default function RosterCalendar({ employees, onUpdate }: RosterGridProps)
           </div>
 
           {/* Rows */}
-          <div className="max-h-[600px] overflow-y-auto">
+          <div className="max-h-[600px] overflow-y-auto overflow-x-hidden">
             {employees.map((emp, i) => (
-              <div key={emp.empId} className="grid grid-cols-[200px_1fr] border-b group animate-in fade-in slide-in-from-left-4" style={{ animationDelay: `${i * 20}ms` }}>
+              <div key={emp.empId} className="flex border-b group animate-in fade-in slide-in-from-left-4" style={{ animationDelay: `${i * 20}ms` }}>
                 <div 
                   className={cn(
-                    "p-3 border-r bg-muted/5 flex flex-col justify-center min-h-[64px] transition-colors",
-                    user?.role === 'admin' ? "cursor-pointer hover:bg-muted/10" : "cursor-default"
+                    "w-[200px] p-3 border-r bg-muted/5 flex flex-col justify-center min-h-[64px] transition-colors shrink-0 sticky left-0 z-20",
+                    canEdit(emp) ? "cursor-pointer hover:bg-muted/10" : "cursor-default"
                   )}
                   onClick={() => handleSingleClickManage(new Date(), emp)}
                 >
@@ -392,7 +412,7 @@ export default function RosterCalendar({ employees, onUpdate }: RosterGridProps)
                     <span className="text-[10px] text-muted-foreground truncate">{emp.role}</span>
                   </div>
                 </div>
-                <div className="grid" style={{ gridTemplateColumns: `repeat(${daysInMonth.length}, 1fr)` }}>
+                <div className="flex flex-1">
                   {daysInMonth.map(day => {
                     const shift = getShift(day, emp.crew);
                     const leave = isDayOnLeave(day, emp.leaves);
@@ -425,11 +445,11 @@ export default function RosterCalendar({ employees, onUpdate }: RosterGridProps)
                       <div 
                         key={day.toISOString()} 
                         className={cn(
-                          "min-h-[64px] border-r last:border-r-0 flex items-center justify-center text-xs transition-all active:scale-95 relative",
-                          user?.role === 'admin' ? "cursor-pointer" : "cursor-default",
+                          "w-[48px] min-h-[64px] border-r last:border-r-0 flex items-center justify-center text-xs transition-all active:scale-95 relative shrink-0",
+                          canEdit(emp) ? "cursor-pointer" : "cursor-default",
                           bg,
                           text,
-                          selectedEmp?.empId === emp.empId && selectedDates.some(d => isSameDay(d, day)) && "ring-2 ring-inset ring-brand-purple z-20 bg-brand-purple/10",
+                          selectedEmp?.empId === emp.empId && selectedDates.some(d => isSameDay(d, day)) && "ring-2 ring-inset ring-brand-purple z-10 bg-brand-purple/10",
                           isConflicted && "ring-2 ring-inset ring-rose-500 animate-pulse bg-rose-500/10 z-10"
                         )}
                         onClick={(e) => handleCellClick(day, emp, e)}

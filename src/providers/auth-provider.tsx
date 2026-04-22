@@ -32,14 +32,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const pathname = usePathname();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       const payload = decodeToken(token);
       if (payload) {
-        setUser({ email: payload.email, role: payload.role });
+        setUser({ 
+          email: payload.email, 
+          role: payload.role, 
+          name: payload.name, 
+          empId: payload.empId 
+        });
       } else {
         localStorage.removeItem("token");
       }
@@ -52,8 +56,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await adminApi.login(credentials);
       const { token, role } = response.data;
       localStorage.setItem("token", token);
-      setUser({ email: credentials.email, role });
-      router.push("/dashboard");
+      
+      const payload = decodeToken(token);
+      setUser({ 
+        email: payload.email, 
+        role: payload.role, 
+        name: payload.name, 
+        empId: payload.empId 
+      });
+      
+      router.push("/calendar");
     } catch (error) {
       throw error;
     }
@@ -62,8 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = async (credentials: any) => {
     try {
       await adminApi.register(credentials);
-      // After registration, we could auto-login or redirect to login.
-      // Redirecting to login for clarity.
+      router.push("/login");
     } catch (error) {
       throw error;
     }
@@ -74,9 +85,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     router.push("/login");
   };
-
-  // Protected routes logic removed - App is now public
-  // We handle feature gating in the components themselves
 
   return (
     <AuthContext.Provider value={{ user, loading, login, register, logout }}>

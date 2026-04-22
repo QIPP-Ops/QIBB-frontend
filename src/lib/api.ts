@@ -35,10 +35,17 @@ export const rosterApi = {
 
 export const adminApi = {
   getStatus: () => api.get("/admin/status"),
+  getConfig: () => api.get("/admin/config"),
   checkPin: (pin: string) => api.post("/admin/check-pin", { pin }),
   setLock: (locked: boolean) => api.post("/admin/set-lock", { locked }),
   login: (credentials: any) => api.post("/auth/login", credentials),
   register: (credentials: any) => api.post("/auth/register", credentials),
+  
+  // Metadata Management
+  addCrew: (crew: string) => api.post("/admin/crews", { crew }),
+  removeCrew: (crew: string) => api.delete(`/admin/crews/${crew}`),
+  addRole: (role: string) => api.post("/admin/roles", { role }),
+  removeRole: (role: string) => api.delete(`/admin/roles/${role}`),
 };
 
 export const safetyApi = {
