@@ -2,8 +2,9 @@
 
 ## Required GitHub Secrets
 
-- `AZURE_WEBAPP_NAME`: Azure frontend web app name (for example `qippop`)
-- `AZURE_WEBAPP_PUBLISH_PROFILE`: Publish profile XML from Azure Web App
+- `AZURE_WEBAPP_PUBLISH_PROFILE`: Publish profile XML from the **qippop** Web App (download from Azure Portal → **Get publish profile**)
+
+The workflow deploys to app name `qippop` (fixed in `.github/workflows/deploy-azure-webapp.yml`).
 
 ## Required Azure App Settings
 
