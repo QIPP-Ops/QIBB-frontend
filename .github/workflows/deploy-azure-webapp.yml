@@ -26,6 +26,8 @@ jobs:
 
       - name: Build Next.js app
         run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: https://qipp-backend-h6e9gxeffxbbf6ca.westeurope-01.azurewebsites.net/api
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
