@@ -53,7 +53,7 @@ export function Sidebar() {
       adminOnly: true,
     },
     {
-      label: "Safety (PTW)",
+      label: "PTW",
       icon: ShieldCheck,
       href: "/safety",
       color: "text-emerald-500",

@@ -86,13 +86,19 @@ export default function TrainingsPage() {
               className="pl-9 w-64 bg-card border-border h-10 rounded-xl"
             />
           </div>
-          <Button 
-            className="text-white font-bold h-10 px-6 rounded-xl gap-2 shadow-lg hover:brightness-110"
-            style={{ backgroundColor: MISHKATY_PURPLE }}
+          <a 
+            href="https://mishkaty.sabacloud.com/Saba/Web_spf/EU2PRD0191/app/dashboard"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <ExternalLink size={16} />
-            Mishkaty Login
-          </Button>
+            <Button 
+              className="text-white font-bold h-10 px-6 rounded-xl gap-2 shadow-lg hover:brightness-110"
+              style={{ backgroundColor: MISHKATY_PURPLE }}
+            >
+              <ExternalLink size={16} />
+              Mishkaty Login
+            </Button>
+          </a>
         </div>
       </div>
 

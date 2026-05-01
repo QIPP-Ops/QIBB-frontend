@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { rosterApi } from "@/lib/api";
+import { rosterApi, adminApi } from "@/lib/api";
 import { 
   Dialog, 
   DialogContent, 
@@ -35,9 +35,9 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import ExcelJS from "exceljs";
-import { Alert } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { saveAs } from "file-saver";
-import { FileSpreadsheet, Loader2 } from "lucide-react";
+import { FileSpreadsheet, Loader2, Lock } from "lucide-react";
 import { useAuth } from "@/providers/auth-provider";
 
 const SHIFT_CYCLES: Record<string, string[]> = {
@@ -83,11 +83,28 @@ export default function RosterCalendar({ employees, onUpdate }: RosterGridProps)
   const [leaveType, setLeaveType] = useState<string>("Planned");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
   const { user } = useAuth();
   const router = useRouter();
 
+  useEffect(() => {
+    const fetchLockStatus = async () => {
+      try {
+        const res = await adminApi.getStatus();
+        setIsLocked(res.data.editingLocked);
+      } catch (error) {
+        console.error("Failed to fetch lock status", error);
+      }
+    };
+    fetchLockStatus();
+  }, []);
+
   const canEdit = (emp: Employee) => {
     if (!user) return false;
+    
+    // If locked, only administrators can edit anything
+    if (isLocked && user.role !== 'admin') return false;
+
     if (user.role === 'admin') return true;
     
     // Direct match by Employee ID is the most reliable (Unified Model)
@@ -105,6 +122,11 @@ export default function RosterCalendar({ employees, onUpdate }: RosterGridProps)
   const handleCellClick = (day: Date, emp: Employee, event: React.MouseEvent) => {
     if (!user) {
       toast.info("Read-only access: Sign in as Personnel to manage roster records.");
+      return;
+    }
+
+    if (isLocked && user.role !== 'admin') {
+      toast.error("Roster Locked: Administration has disabled editing. Please contact an Admin for changes.");
       return;
     }
 
@@ -359,6 +381,18 @@ export default function RosterCalendar({ employees, onUpdate }: RosterGridProps)
           )}
         </div>
       </div>
+
+      {/* Lock Alert Banner */}
+      {isLocked && user?.role !== 'admin' && (
+        <div className="px-6 py-3">
+          <Alert className="bg-red-50 border border-red-200 text-red-900 rounded-2xl shadow-sm">
+            <Lock className="h-4 w-4 text-red-600" />
+            <AlertDescription className="font-bold">
+              Roster editing is currently locked by Administration. Please contact an Admin for any required changes.
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
 
       <div className="flex flex-wrap gap-4 px-6 py-4 bg-muted/10 border-b">
          {[

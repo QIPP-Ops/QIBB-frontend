@@ -49,7 +49,12 @@ export const adminApi = {
 };
 
 export const safetyApi = {
-  getPermits: () => api.get("/safety"),
+  getDashboard: () => api.get("/safety/dashboard"),
+  getPermits: () => api.get("/safety/permits"),
+  getJhas: () => api.get("/safety/jhas"),
+  getWorkOrders: (type?: string) => api.get("/safety/work-orders", { params: { type } }),
+  getLotoSafes: () => api.get("/safety/loto-safes"),
+  getIsolationPoints: () => api.get("/safety/isolation-points"),
   createPermit: (data: any) => api.post("/safety", data),
   updatePermit: (id: string, data: any) => api.patch(`/safety/${id}`, data),
   deletePermit: (id: string) => api.delete(`/safety/${id}`),

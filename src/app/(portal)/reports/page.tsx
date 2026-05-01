@@ -36,7 +36,7 @@ const reportCategories = [
     bg: "bg-brand-lilac/10",
   },
   {
-    title: "Safety & PTW",
+    title: "PTW",
     description: "Permit to Work status, LOTO device counts, and HSE incidents.",
     icon: ShieldAlert,
     status: "Critical",
@@ -92,7 +92,13 @@ export default function ReportsPage() {
               </div>
 
               <div className="mt-10 flex items-center gap-4 relative z-10">
-                <Link href={report.title === "Environmental Compliance" ? "/reports/environmental" : "/reports"}>
+                <Link href={
+                  report.title === "Environmental Compliance" 
+                    ? "/reports/environmental" 
+                    : report.title === "Operations Monthly"
+                    ? "/reports/operations"
+                    : "/reports"
+                }>
                   <Button className="bg-brand-purple hover:bg-brand-purple/90 text-white gap-2 px-6">
                     View Data
                     <ArrowRight size={16} />
