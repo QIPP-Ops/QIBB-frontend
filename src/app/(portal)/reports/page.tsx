@@ -21,14 +21,6 @@ import { useAuth } from "@/providers/auth-provider";
 
 const reportCategories = [
   {
-    title: "Environmental Compliance",
-    description: "Daily emission stack parameters and regulatory reporting.",
-    icon: Wind,
-    status: "Compliant",
-    color: "text-brand-lime",
-    bg: "bg-brand-lime/10",
-  },
-  {
     title: "Operations Monthly",
     description: "Consolidated KPI performance, heat rate analysis, and water production.",
     icon: Activity,
@@ -102,9 +94,7 @@ export default function ReportsPage() {
 
               <div className="mt-10 flex items-center gap-4 relative z-10">
                 <Link href={
-                  report.title === "Environmental Compliance" 
-                    ? "/reports/environmental" 
-                    : report.title === "Operations Monthly"
+                  report.title === "Operations Monthly"
                     ? "/reports/operations"
                     : report.title === "Chemical & RO Reports"
                     ? "/reports/ro"
