@@ -6,10 +6,11 @@
 
 The workflow deploys to app name `qippop` (fixed in `.github/workflows/deploy-azure-webapp.yml`).
 
-## Required Azure App Settings
+## Build-time variables (GitHub Secrets)
 
-- `NEXT_PUBLIC_API_URL`
+- `NEXT_PUBLIC_API_URL` (repository secret)
   - Example: `https://<your-backend-domain>/api`
+  - Note: Next.js inlines `NEXT_PUBLIC_*` at build time. Set this as a repository secret (Settings → Secrets) so the GitHub Action can provide it during `npm run build`. Changing this value requires rebuilding the frontend.
 
 ## Runtime notes
 
