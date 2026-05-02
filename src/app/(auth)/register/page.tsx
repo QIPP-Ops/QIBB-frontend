@@ -73,7 +73,7 @@ export default function RegisterPage() {
         role: formData.role,
         accessRole: 'viewer' // Default access role
       });
-      toast.success("Personnel account created. You can now sign in.");
+      toast.success("Registration successful. Access is pending admin approval.");
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Registration failed.");
     } finally {

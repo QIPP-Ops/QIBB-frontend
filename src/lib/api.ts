@@ -47,6 +47,13 @@ export const adminApi = {
   removeCrew: (crew: string) => api.delete(`/admin/crews/${crew}`),
   addRole: (role: string) => api.post("/admin/roles", { role }),
   removeRole: (role: string) => api.delete(`/admin/roles/${role}`),
+
+  // User Management
+  getAllUsers: () => api.get("/admin/users"),
+  getPendingUsers: () => api.get("/admin/users/pending"),
+  approveUser: (id: string) => api.put(`/admin/users/${id}/approve`),
+  rejectUser: (id: string) => api.delete(`/admin/users/${id}/reject`),
+  updateUserRole: (id: string, accessRole: string) => api.put(`/admin/users/${id}/role`, { accessRole }),
 };
 
 export const safetyApi = {
