@@ -10,7 +10,8 @@ import {
   Download,
   Calendar,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Droplets
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,14 @@ const reportCategories = [
     bg: "bg-brand-lilac/10",
   },
   {
+    title: "Chemical & RO Reports",
+    description: "Daily water treatment performance, tank levels, and RO unit status.",
+    icon: Droplets,
+    status: "Updated",
+    color: "text-sky-500",
+    bg: "bg-sky-500/10",
+  },
+  {
     title: "PTW",
     description: "Permit to Work status, LOTO device counts, and HSE incidents.",
     icon: ShieldAlert,
@@ -48,8 +57,8 @@ const reportCategories = [
     description: "Crew training progress and technical certification tracker.",
     icon: Layers,
     status: "In Progress",
-    color: "text-sky-500",
-    bg: "bg-sky-500/10",
+    color: "text-brand-lilac",
+    bg: "bg-brand-lilac/10",
   },
 ];
 
@@ -97,6 +106,8 @@ export default function ReportsPage() {
                     ? "/reports/environmental" 
                     : report.title === "Operations Monthly"
                     ? "/reports/operations"
+                    : report.title === "Chemical & RO Reports"
+                    ? "/reports/ro"
                     : "/reports"
                 }>
                   <Button className="bg-brand-purple hover:bg-brand-purple/90 text-white gap-2 px-6">

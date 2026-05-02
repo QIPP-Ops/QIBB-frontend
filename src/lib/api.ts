@@ -67,3 +67,9 @@ export const safetyApi = {
   updatePermit: (id: string, data: any) => api.patch(`/safety/${id}`, data),
   deletePermit: (id: string) => api.delete(`/safety/${id}`),
 };
+
+export const roReportApi = {
+  getAll: () => api.get("/ro-reports"),
+  getLatest: () => api.get("/ro-reports/latest"),
+  getById: (id: string) => api.get(`/ro-reports/${id}`),
+};
