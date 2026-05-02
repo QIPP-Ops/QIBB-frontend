@@ -184,9 +184,9 @@ export default function TrainingsPage() {
             </h4>
             <div className="space-y-4">
               {[
-                { name: "John Doe", course: "Lockout Tagout (LOTO)", date: "2h ago" },
-                { name: "Sarah Smith", course: "Hazardous Materials", date: "5h ago" },
-                { name: "Alex Wong", course: "Leadership Essentials", date: "yesterday" },
+                { name: "Mark Ramirez", course: "Lockout Tagout (LOTO)", date: "2h ago" },
+                { name: "Alvin Perello", course: "Hazardous Materials", date: "5h ago" },
+                { name: "Adam Alhuzum", course: "Leadership Essentials", date: "yesterday" },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center font-bold text-[10px]">
